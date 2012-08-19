@@ -5,9 +5,11 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'semantic_blog.views.home', name='home'),
-    # url(r'^semantic_blog/', include('semantic_blog.foo.urls')),
+    (r'^$', 'semantic_blog.views.index'),
+    (r'^login/$', 'django.contrib.auth.views.login'),
+    (r'^logout/$', 'django.contrib.auth.views.logout_then_login'),
+    (r'^article/create$', 'semantic_blog.views.create_article'),
+    (r'^article/(?P<article_id>\d+)$', 'semantic_blog.views.view_article'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

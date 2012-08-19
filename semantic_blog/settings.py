@@ -1,23 +1,24 @@
 # Django settings for semantic_blog project.
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Kamil Chudy', 'kam.chudy@gmail.com'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'semantic_blog',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        }
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -48,12 +49,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.normpath( os.path.join( os.path.dirname(__file__), 'static/'))
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/static/upload/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -106,9 +107,7 @@ ROOT_URLCONF = 'semantic_blog.urls'
 WSGI_APPLICATION = 'semantic_blog.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.normpath(os.path.join(os.path.dirname(__file__), 'templates/')),
 )
 
 INSTALLED_APPS = (
@@ -118,6 +117,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'semantic_blog',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -152,3 +152,13 @@ LOGGING = {
         },
     }
 }
+
+# Security
+LOGIN_URL='/login/'
+LOGIN_REDIRECT_URL='/'
+AUTH_PROFILE_NAME='UserProfile'
+
+# Stanbol
+STANBOL_URL='http://localhost:8080/'
+STANBOL_CONTENTHUB_STORE_URL=STANBOL_URL + 'contenthub/contenthub/store/%(item_id)d'
+STANBOL_CONTENTHUB_GET_META_URL=STANBOL_URL + 'contenthub/contenthub/store/metadata/%(item_id)d'

@@ -1,0 +1,22 @@
+{% load url from future %}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Index</title>
+</head>
+<body>
+<h1>Hello {{ name }}!</h1>
+<div>
+    <a href="{% url 'semantic_blog.views.create_article' %}">Create article</a>
+</div>
+<div>
+    <ul>
+        {% for article in articles %}
+            <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+</body>
+</html>
