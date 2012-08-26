@@ -3,11 +3,35 @@
 <html>
 <head>
     <title>{{ article.title }}</title>
+
+    <link rel="stylesheet" type="text/css" href='/static/css/style.css'/>
+
+    <script type="text/javascript" src="/static/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.highlight.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".entity").hover(function() {
+                console.log("hover " + $(this).text());
+                $("#article-content").highlight($(this).text())
+            }, function() {
+                console.log("unhover " + $(this).text());
+                $("#article-content").unhighlight()
+            });
+
+        });
+    </script>
 </head>
 <body>
 <h1>{{ article.title }} by {{ author.get_display_name }}</h1>
-<div>
+<div id="article-content">
     {{ article.content }}
+</div>
+<div id="enhancements">
+    <ul>
+        {% for entity in meta_entities %}
+            <li class="entity"><span><a href="#">{{ entity }}</a></span></li>
+        {% endfor %}
+    </ul>
 </div>
 </body>
 </html>

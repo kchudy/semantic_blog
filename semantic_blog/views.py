@@ -1,10 +1,8 @@
-import urllib
-import urllib2
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template.context import RequestContext
-from semantic_blog import settings, helpers
+from semantic_blog import  helpers
 from semantic_blog.forms import ArticleForm
 from semantic_blog.models import UserArticleConnection, Article
 
@@ -53,11 +51,12 @@ def view_article(request, article_id):
     user_article_conn = get_object_or_404(UserArticleConnection, \
         article = article, connection = UserArticleConnection.AUTHOR)
 
-    helpers.get_article_meta_data(article.pk)
+    meta = helpers.get_article_enhancements(article)
 
     ctx = RequestContext(request, {
         'article': article,
-        'author': user_article_conn.user
+        'author': user_article_conn.user,
+        'meta_entities': meta.keys(),
         })
 
     return render_to_response('view_article.html', ctx)

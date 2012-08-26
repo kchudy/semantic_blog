@@ -118,6 +118,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'semantic_blog',
+
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -160,5 +161,6 @@ AUTH_PROFILE_NAME='UserProfile'
 
 # Stanbol
 STANBOL_URL='http://localhost:8080/'
-STANBOL_CONTENTHUB_STORE_URL=STANBOL_URL + 'contenthub/contenthub/store/%(item_id)d'
-STANBOL_CONTENTHUB_GET_META_URL=STANBOL_URL + 'contenthub/contenthub/store/metadata/%(item_id)d'
+#STANBOL_CONTENTHUB_STORE_URL=STANBOL_URL + 'contenthub/contenthub/store/%(item_id)d'
+#STANBOL_CONTENTHUB_GET_META_URL=STANBOL_URL + 'contenthub/contenthub/store/metadata/%(item_id)d'
+STANBOL_CONTENTHUB_GET_META_URL=STANBOL_URL + 'enhancer'

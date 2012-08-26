@@ -1,36 +1,76 @@
 import urllib
 import urllib2
+from django.utils import simplejson
 import rdflib
+from rdflib.term import URIRef
 from semantic_blog import settings
+from semantic_blog.models import Enhancement, Entity
 
-def store_article_in_stanbol(article):
-    url = settings.STANBOL_CONTENTHUB_STORE_URL % {'item_id' : article.pk}
-    headers = {'Content-Type' : 'text/plain'}
+def get_article_enhancements(article):
+    g = rdflib.Graph()
 
-    values = {'data' : article.content}
+    g.parse(get_content_meta_rdf(article.content))
+
+    entities = dict()
+
+    for subject in g.subjects():
+        if str(subject).startswith('http://dbpedia.org/resource/'):
+            label = g.preferredLabel(subject=subject, lang='en')[0][1]
+
+            for predicate, object in g.predicate_objects(subject=subject):
+                enhancement = Enhancement()
+
+                enhancement.predicate = predicate
+                enhancement.object = object
+
+                add_to_dict(entities, key=label, value=enhancement)
+
+    return entities
+
+def get_content_meta(content):
+    url = settings.STANBOL_CONTENTHUB_GET_META_URL
+
+    headers = {
+        'Content-Type' : 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json',
+        }
+
+    values = {
+        'content' : content,
+        }
 
     data = urllib.urlencode(values)
     req = urllib2.Request(url, data, headers)
+
     response = urllib2.urlopen(req)
 
-    html = response.read()
+    return response
 
-    print html
+def get_content_meta_rdf(content):
+    url = settings.STANBOL_CONTENTHUB_GET_META_URL
 
-def get_article_meta_data(article_id):
-    url = settings.STANBOL_CONTENTHUB_GET_META_URL % {'item_id' : article_id}
-    req = urllib2.Request(url)
+    headers = {
+        'Content-Type' : 'application/x-www-form-urlencoded',
+        'Accept' : 'application/rdf+xml',
+        }
+
+    values = {
+        'content' : content,
+        }
+
+    data = urllib.urlencode(values)
+    req = urllib2.Request(url, data, headers)
+
     response = urllib2.urlopen(req)
 
-    rdf = response.read()
+    return response
 
-    g = rdflib.Graph()
-    result = g.parse(data=rdf)
-    print("graph has %s statements." % len(g))
+def add_to_dict(dict, key, value):
+    if dict.has_key(key):
+        dict[key].append(value)
+    else:
+        dict[key] = list()
+        dict[key].append(value)
 
-    for subj, pred, obj in g:
-        if (subj, pred, obj) not in g:
-            raise Exception("It better be!")
-
-    print result
-
+def to_unicode_str(value):
+    return unicode(str(value), errors='ignore')

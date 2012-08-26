@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class Article(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=20000)
+    meta = models.CharField(max_length=20000, null=True)
 
     @models.permalink
     def get_absolute_url(self):
@@ -35,3 +36,9 @@ class UserArticleConnection(models.Model):
     user = models.ForeignKey(UserProfile)
     article = models.ForeignKey(Article)
     connection = models.IntegerField()
+
+class Enhancement:
+    pass
+
+class Entity:
+    pass
