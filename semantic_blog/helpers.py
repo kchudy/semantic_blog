@@ -1,33 +1,56 @@
 import urllib
 import urllib2
-from django.utils import simplejson
-import rdflib
+from rdflib.graph import Graph
 from rdflib.term import URIRef
 from semantic_blog import settings
 from semantic_blog.models import Enhancement, Entity
 
 def get_article_enhancements(article):
-    g = rdflib.Graph()
-
+    g = Graph()
     g.parse(get_content_meta_rdf(article.content))
 
+    predicate_name = URIRef('http://fise.iks-project.eu/ontology/selected-text')
+    predicate_entity_label = URIRef('http://fise.iks-project.eu/ontology/entity-label')
+    predicate_resource = URIRef('http://purl.org/dc/terms/subject')
+    predicate_comment = URIRef('http://www.w3.org/2000/01/rdf-schema#comment')
+    predicate_entity_ref = URIRef('http://fise.iks-project.eu/ontology/entity-reference')
+    predicate_type = URIRef('http://www.w3.org/1999/02/22-rdf-syntax-ns#type')
+
+    subjects = set(g.subjects())
+
     entities = dict()
+    enhancements = list()
 
-    for subject in g.subjects():
-        if str(subject).startswith('http://dbpedia.org/resource/'):
-            label = g.preferredLabel(subject=subject, lang='en')[0][1]
+    for subject in subjects:
+        is_enhancement = get_first(g.triples((subject, predicate_type, URIRef('http://fise.iks-project.eu/ontology/Enhancement'))))
 
-            for predicate, object in g.predicate_objects(subject=subject):
-                enhancement = Enhancement()
+        if is_enhancement:
+            enhancement = Enhancement()
 
-                enhancement.predicate = predicate
-                enhancement.object = object
+            enhancement.name = get_first(g.objects(subject=subject, predicate=predicate_name))
 
-                add_to_dict(entities, key=label, value=enhancement)
+            if not enhancement.name:
+                enhancement.name = get_first(g.objects(subject=subject, predicate=predicate_entity_label))
 
-    return entities
+            if enhancement.name:
+                enhancement.entity = get_first(g.objects(subject=subject, predicate=predicate_entity_ref))
 
-def get_content_meta(content):
+                enhancements.append(enhancement)
+        else:
+            entity = Entity()
+
+            entity.tags = map(str, g.objects(subject=subject, predicate=predicate_resource))
+            entity.comment = get_first(g.objects(subject=subject, predicate=predicate_comment))
+
+            entities[subject] = entity
+
+    for enhancement in enhancements:
+        if enhancement.entity:
+            enhancement.entity = entities[enhancement.entity]
+
+    return sorted(enhancements, key=lambda x: x.name)
+
+def get_content_meta_json(content):
     url = settings.STANBOL_CONTENTHUB_GET_META_URL
 
     headers = {
@@ -65,12 +88,8 @@ def get_content_meta_rdf(content):
 
     return response
 
-def add_to_dict(dict, key, value):
-    if dict.has_key(key):
-        dict[key].append(value)
-    else:
-        dict[key] = list()
-        dict[key].append(value)
-
-def to_unicode_str(value):
-    return unicode(str(value), errors='ignore')
+def get_first(generator):
+    try:
+        return generator.next()
+    except StopIteration:
+        return False

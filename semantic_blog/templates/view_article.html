@@ -28,8 +28,13 @@
 </div>
 <div id="enhancements">
     <ul>
-        {% for entity in meta_entities %}
-            <li class="entity"><span><a href="#">{{ entity }}</a></span></li>
+        {% for enhancement in enhancements %}
+            <li>
+                <b><div><a href="#">{{ enhancement.name }}</a></div></b>
+                {% if enhancement.entity %}
+                    <div>Comment: {{ enhancement.entity.comment }}</div>
+                {% endif %}
+            </li>
         {% endfor %}
     </ul>
 </div>

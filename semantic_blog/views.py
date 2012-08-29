@@ -51,12 +51,12 @@ def view_article(request, article_id):
     user_article_conn = get_object_or_404(UserArticleConnection, \
         article = article, connection = UserArticleConnection.AUTHOR)
 
-    meta = helpers.get_article_enhancements(article)
+    enhancements = helpers.get_article_enhancements(article)
 
     ctx = RequestContext(request, {
         'article': article,
         'author': user_article_conn.user,
-        'meta_entities': meta.keys(),
+        'enhancements': enhancements,
         })
 
     return render_to_response('view_article.html', ctx)
