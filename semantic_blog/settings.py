@@ -118,6 +118,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'semantic_blog',
+    'south',
 
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',

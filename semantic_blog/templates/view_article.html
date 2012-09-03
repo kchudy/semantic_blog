@@ -27,13 +27,26 @@
     {{ article.content }}
 </div>
 <div id="enhancements">
+    <label>Enhancements:</label>
+
     <ul>
         {% for enhancement in enhancements %}
             <li>
-                <b><div><a href="#">{{ enhancement.name }}</a></div></b>
+                <b><div><a href="#">{{ enhancement.value }}</a></div></b>
                 {% if enhancement.entity %}
                     <div>Comment: {{ enhancement.entity.comment }}</div>
                 {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<div id="tags">
+    <label>Tags:</label>
+
+    <ul>
+        {% for tag in tags %}
+            <li>
+                <span>{{ tag.value }}</span>
             </li>
         {% endfor %}
     </ul>

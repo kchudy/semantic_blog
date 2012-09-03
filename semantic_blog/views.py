@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template.context import RequestContext
 from semantic_blog import  helpers
 from semantic_blog.forms import ArticleForm
-from semantic_blog.models import UserArticleConnection, Article
+from semantic_blog.models import UserArticleConnection, Article, Tag, Enhancement
 
 @login_required
 def index(request):
@@ -33,7 +33,11 @@ def create_article(request):
             user_article_conn.connection = UserArticleConnection.AUTHOR
             user_article_conn.save()
 
-            helpers.store_article_in_stanbol(article)
+            enhancements = helpers.get_article_enhancements(article)
+
+            article.enhancements = enhancements
+            article.save()
+
         return redirect('semantic_blog.views.index')
     else:
         form = ArticleForm()
@@ -51,12 +55,15 @@ def view_article(request, article_id):
     user_article_conn = get_object_or_404(UserArticleConnection, \
         article = article, connection = UserArticleConnection.AUTHOR)
 
-    enhancements = helpers.get_article_enhancements(article)
+    enhancements = article.get_enhancements()
+
+    tags = article.get_tags()
 
     ctx = RequestContext(request, {
         'article': article,
         'author': user_article_conn.user,
         'enhancements': enhancements,
+        'tags': tags,
         })
 
     return render_to_response('view_article.html', ctx)

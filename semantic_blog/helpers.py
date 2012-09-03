@@ -3,7 +3,7 @@ import urllib2
 from rdflib.graph import Graph
 from rdflib.term import URIRef
 from semantic_blog import settings
-from semantic_blog.models import Enhancement, Entity
+from semantic_blog.models import Enhancement, Entity, Tag
 
 def get_article_enhancements(article):
     g = Graph()
@@ -27,28 +27,39 @@ def get_article_enhancements(article):
         if is_enhancement:
             enhancement = Enhancement()
 
-            enhancement.name = get_first(g.objects(subject=subject, predicate=predicate_name))
+            enhancement.value = get_first(g.objects(subject=subject, predicate=predicate_name))
 
-            if not enhancement.name:
-                enhancement.name = get_first(g.objects(subject=subject, predicate=predicate_entity_label))
+            if not enhancement.value:
+                enhancement.value = get_first(g.objects(subject=subject, predicate=predicate_entity_label))
 
-            if enhancement.name:
-                enhancement.entity = get_first(g.objects(subject=subject, predicate=predicate_entity_ref))
+            if enhancement.value:
+                enhancement.entity_name = get_first(g.objects(subject=subject, predicate=predicate_entity_ref))
 
+                enhancement.save()
                 enhancements.append(enhancement)
         else:
             entity = Entity()
-
-            entity.tags = map(str, g.objects(subject=subject, predicate=predicate_resource))
+            entity.save()
+            tags = map(save_tag, g.objects(subject=subject, predicate=predicate_resource))
+            entity.tags = tags
             entity.comment = get_first(g.objects(subject=subject, predicate=predicate_comment))
+
+            entity.save()
 
             entities[subject] = entity
 
     for enhancement in enhancements:
-        if enhancement.entity:
-            enhancement.entity = entities[enhancement.entity]
+        if enhancement.entity_name:
+            enhancement.entity = entities[enhancement.entity_name]
+            enhancement.save()
 
-    return sorted(enhancements, key=lambda x: x.name)
+#    sorted(enhancements, key=lambda x: x.name)
+
+    return enhancements
+
+def save_tag(value):
+    return Tag.objects.get_or_create(value=str(value))[0]
+
 
 def get_content_meta_json(content):
     url = settings.STANBOL_CONTENTHUB_GET_META_URL

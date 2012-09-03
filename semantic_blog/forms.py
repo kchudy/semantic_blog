@@ -9,3 +9,5 @@ class ArticleForm(ModelForm):
             'title': TextInput(),
             'content': Textarea(),
         }
+
+        exclude = ('enhancements')
