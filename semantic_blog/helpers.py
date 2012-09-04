@@ -58,7 +58,8 @@ def get_article_enhancements(article):
     return enhancements
 
 def save_tag(value):
-    return Tag.objects.get_or_create(value=str(value))[0]
+    tag_value = urllib.unquote(str(value).replace('http://dbpedia.org/resource/Category:', '').replace('_', ' '))
+    return Tag.objects.get_or_create(value=tag_value, url=str(value))[0]
 
 
 def get_content_meta_json(content):

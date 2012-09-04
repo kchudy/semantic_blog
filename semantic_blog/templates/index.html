@@ -9,6 +9,13 @@
 <body>
 <h1>Hello {{ name }}!</h1>
 <div>
+    <form method="post" action="{% url 'semantic_blog.views.find_content' %}">
+        {% csrf_token %}
+        <input id="lookup" name="lookup">
+        <input type="submit" value="Search">
+    </form>
+</div>
+<div>
     <a href="{% url 'semantic_blog.views.create_article' %}">Create article</a>
 </div>
 <div>

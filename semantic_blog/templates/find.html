@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Search results</title>
+</head>
+<body>
+    <h1>Search results</h1>
+    <br/>
+    <div>Articles:</div>
+    <ul>
+    {% for article in articles %}
+        <li>{{ article.title }}</li>
+    {% endfor %}
+    </ul>
+    <br/>
+    <div>Tags:</div>
+    <ul>
+        {% for tag in tags %}
+            <li>{{ tag.value }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

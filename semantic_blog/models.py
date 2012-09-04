@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Tag(models.Model):
-    value = models.CharField(max_length=200, unique=True)
+    value = models.CharField(max_length=200)
+    url = models.CharField(max_length=200, unique=True)
 
     def __unicode__(self):
         return self.value
@@ -11,16 +12,9 @@ class Entity(models.Model):
     comment = models.CharField(max_length=20000)
     tags = models.ManyToManyField(Tag)
 
-    def get_tags(self):
-        return self.tags.all()
-
 class Enhancement(models.Model):
     value = models.CharField(max_length=20000)
     entity = models.ForeignKey(Entity, null=True)
-
-    def get_tags(self):
-        if self.entity:
-            return self.entity.get_tags()
 
 class Article(models.Model):
     title = models.CharField(max_length=100)
@@ -37,10 +31,16 @@ class Article(models.Model):
         return self.title
 
     def get_enhancements(self):
-        return self.enhancements.all()
+        return sorted(self.enhancements.all(), key=lambda x: x.value)
 
     def get_tags(self):
-        return filter(None, map(lambda x: x.get_tags(), self.enhancements.all()))
+        tags = set()
+
+        for enhancement in self.enhancements.all():
+            if enhancement.entity:
+                map(lambda x: tags.add(x), enhancement.entity.tags.all())
+
+        return tags
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, blank=True, null=True)

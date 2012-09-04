@@ -67,3 +67,20 @@ def view_article(request, article_id):
         })
 
     return render_to_response('view_article.html', ctx)
+
+@login_required
+def find_content(request):
+    if request.method == 'POST':
+        lookup = request.POST['lookup']
+
+        articles = Article.objects.filter(content__icontains=lookup)[:5]
+        tags = Tag.objects.filter(value__icontains=lookup)[:5]
+
+        ctx = RequestContext(request, {
+            'articles': articles,
+            'tags': tags,
+            })
+
+        return render_to_response("find.html", ctx)
+    else:
+        return redirect('semantic_blog.views.index')

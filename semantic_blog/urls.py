@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     (r'^$', 'semantic_blog.views.index'),
     (r'^login/$', 'django.contrib.auth.views.login'),
     (r'^logout/$', 'django.contrib.auth.views.logout_then_login'),
+    (r'^find', 'semantic_blog.views.find_content'),
     (r'^article/create$', 'semantic_blog.views.create_article'),
     (r'^article/(?P<article_id>\d+)$', 'semantic_blog.views.view_article'),
 
