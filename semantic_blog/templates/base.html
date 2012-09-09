@@ -1,0 +1,54 @@
+﻿{% load url from future %}
+
+<html>
+<head>
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+
+    <script type="text/javascript" src="/static/js/jquery-1.6.2.min.js"></script>
+    {% block js %}
+    {% endblock %}
+
+    <link rel="stylesheet" type="text/css" href='/static/css/style.css'/>
+    {% block css %}
+    {% endblock %}
+</head>
+<body>
+
+<div id="container">
+
+    <div id="header">
+        <div id="header-wrap">
+            <ul>
+                <li><a href="{% url 'semantic_blog.views.index' %}" title="Home">Home</a></li>
+                <li><a href="{% url 'semantic_blog.views.create_article' %}" title="Write">Write</a></li>
+            </ul>
+
+            <div id="header-search">
+                <form method="post" action="{% url 'semantic_blog.views.find_content' %}">
+                    {% csrf_token %}
+                    <input type="search" name="lookup" id="lookup" placeholder="Search" autocomplete="off">
+{#                    <input type="submit" value="Search">#}
+                </form>
+            </div>
+
+            <div id="header-account">
+{#                {% if user.userprofile.avatar %}#}
+{#                    <span><img src="{{ STATIC_URL }}img/{{ user.userprofile.avatar }}"></span>#}
+{#                {% else %}#}
+{#                    <span><img src="{{ STATIC_URL }}img/anonymous24.png"></span>#}
+{#                {% endif %}#}
+                <span>{{ user.userprofile.get_display_name }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>

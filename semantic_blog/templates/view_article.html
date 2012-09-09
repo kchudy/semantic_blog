@@ -1,55 +1,41 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>{{ article.title }}</title>
+{% extends 'base.html' %}
+{% load url from future %}
 
-    <link rel="stylesheet" type="text/css" href='/static/css/style.css'/>
+{% block title %}
+    {{ article.title }} by {{ author.get_display_name }}
+{% endblock %}
 
-    <script type="text/javascript" src="/static/js/jquery-1.6.2.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.highlight.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $(".entity").hover(function() {
-                console.log("hover " + $(this).text());
-                $("#article-content").highlight($(this).text())
-            }, function() {
-                console.log("unhover " + $(this).text());
-                $("#article-content").unhighlight()
-            });
+{% block content %}
+    <h3>{{ article.title }} by {{ author.get_display_name }}</h3>
 
-        });
-    </script>
-</head>
-<body>
-<h1>{{ article.title }} by {{ author.get_display_name }}</h1>
-<div id="article-content">
-    {{ article.content }}
-</div>
-<div id="enhancements">
-    <label>Enhancements:</label>
+    <div id="article-content" class="block">
+        {{ article.content }}
+    </div>
 
-    <ul>
-        {% for enhancement in enhancements %}
-            <li>
-                <b><div><a href="#">{{ enhancement.value }}</a></div></b>
-                {% if enhancement.entity %}
-                    <div>Comment: {{ enhancement.entity.comment }}</div>
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-<div id="tags">
-    <label>Tags:</label>
+    <div id="enhancements" class="block">
+        <div>Enhancements:</div>
 
-    <ul>
-        {% for tag in tags %}
-            <li>
-                <span>{{ tag.value }}</span>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-</body>
-</html>
+        <ul>
+            {% for enhancement in enhancements %}
+                <li>
+                    <b><div><a href="#">{{ enhancement.value }}</a></div></b>
+                    {% if enhancement.comment %}
+                        <div>Comment: {{ enhancement.comment }}</div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="tags" class="block">
+        <div>Tags:</div>
+
+        <ul>
+            {% for tag in tags %}
+                <li>
+                    <span>{{ tag.value }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

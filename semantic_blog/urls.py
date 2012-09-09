@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     (r'^find', 'semantic_blog.views.find_content'),
     (r'^article/create$', 'semantic_blog.views.create_article'),
     (r'^article/(?P<article_id>\d+)$', 'semantic_blog.views.view_article'),
+    (r'^tag/(?P<tag_id>\d+)$', 'semantic_blog.views.view_tag'),
 
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':settings.MEDIA_ROOT}),
 

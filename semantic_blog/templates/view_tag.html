@@ -2,11 +2,14 @@
 {% load url from future %}
 
 {% block title %}
-    Home
+    Tag page - {{ tag.value }}
 {% endblock %}
 
 {% block content %}
+    <h3>{{ tag.value }}</h3>
+
     <div class="block">
+        <div>Articles:</div>
         <ul>
             {% for article in articles %}
                 <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>

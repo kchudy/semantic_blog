@@ -3,7 +3,13 @@ import urllib2
 from rdflib.graph import Graph
 from rdflib.term import URIRef
 from semantic_blog import settings
-from semantic_blog.models import Enhancement, Entity, Tag
+from semantic_blog.models import Enhancement, Tag
+
+def get_or_create_enhancement(dict, key):
+    if not dict.has_key(key):
+        dict[key] = Enhancement()
+
+    return dict[key]
 
 def get_article_enhancements(article):
     g = Graph()
@@ -18,8 +24,8 @@ def get_article_enhancements(article):
 
     subjects = set(g.subjects())
 
-    entities = dict()
-    enhancements = list()
+    enhancements = set()
+    tags = set()
 
     for subject in subjects:
         is_enhancement = get_first(g.triples((subject, predicate_type, URIRef('http://fise.iks-project.eu/ontology/Enhancement'))))
@@ -27,35 +33,40 @@ def get_article_enhancements(article):
         if is_enhancement:
             enhancement = Enhancement()
 
-            enhancement.value = get_first(g.objects(subject=subject, predicate=predicate_name))
+            value = get_first(g.objects(subject=subject, predicate=predicate_name))
 
-            if not enhancement.value:
-                enhancement.value = get_first(g.objects(subject=subject, predicate=predicate_entity_label))
+            if not value:
+                value = get_first(g.objects(subject=subject, predicate=predicate_entity_label))
 
-            if enhancement.value:
-                enhancement.entity_name = get_first(g.objects(subject=subject, predicate=predicate_entity_ref))
+            if value:
+                # there are enhancements with no value - ignore them
+                enhancement.value = value
 
-                enhancement.save()
-                enhancements.append(enhancement)
-        else:
-            entity = Entity()
-            entity.save()
-            tags = map(save_tag, g.objects(subject=subject, predicate=predicate_resource))
-            entity.tags = tags
-            entity.comment = get_first(g.objects(subject=subject, predicate=predicate_comment))
+                entity_name = get_first(g.objects(subject=subject, predicate=predicate_entity_ref))
 
-            entity.save()
+                if entity_name:
+                    enhancement.comment = get_first(g.objects(subject=entity_name, predicate=predicate_comment))
+                    entity_tags = map(save_tag, g.objects(subject=entity_name, predicate=predicate_resource))
 
-            entities[subject] = entity
+                    # TODO try some set operations
+                    for tag in entity_tags:
+                        tags.add(tag)
 
-    for enhancement in enhancements:
-        if enhancement.entity_name:
-            enhancement.entity = entities[enhancement.entity_name]
-            enhancement.save()
+                # check if the set contains the richest enhancement
+                if enhancement in enhancements and enhancement.comment:
+                    enhancements.remove(enhancement)
+
+                enhancements.add(enhancement)
 
 #    sorted(enhancements, key=lambda x: x.name)
 
-    return enhancements
+    for enhancement in enhancements:
+        enhancement.save()
+
+    return enhancements, tags
+
+def get_tag_value(tag_raw):
+    return urllib.unquote(str(tag_raw).replace('http://dbpedia.org/resource/Category:', '').replace('_', ' '))
 
 def save_tag(value):
     tag_value = urllib.unquote(str(value).replace('http://dbpedia.org/resource/Category:', '').replace('_', ' '))

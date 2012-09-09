@@ -33,9 +33,10 @@ def create_article(request):
             user_article_conn.connection = UserArticleConnection.AUTHOR
             user_article_conn.save()
 
-            enhancements = helpers.get_article_enhancements(article)
+            enhancements, tags = helpers.get_article_enhancements(article)
 
             article.enhancements = enhancements
+            article.tags = tags
             article.save()
 
         return redirect('semantic_blog.views.index')
@@ -56,7 +57,6 @@ def view_article(request, article_id):
         article = article, connection = UserArticleConnection.AUTHOR)
 
     enhancements = article.get_enhancements()
-
     tags = article.get_tags()
 
     ctx = RequestContext(request, {
@@ -84,3 +84,15 @@ def find_content(request):
         return render_to_response("find.html", ctx)
     else:
         return redirect('semantic_blog.views.index')
+
+@login_required
+def view_tag(request, tag_id):
+    tag = get_object_or_404(Tag, pk=tag_id)
+    articles = tag.get_articles()
+
+    ctx = RequestContext(request, {
+        'tag': tag,
+        'articles': articles,
+        })
+
+    return render_to_response('view_tag.html', ctx)

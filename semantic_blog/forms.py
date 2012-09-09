@@ -10,4 +10,4 @@ class ArticleForm(ModelForm):
             'content': Textarea(),
         }
 
-        exclude = ('enhancements')
+        exclude = ('enhancements', 'tags')

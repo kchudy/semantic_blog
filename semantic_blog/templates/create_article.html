@@ -1,17 +1,19 @@
+{% extends 'base.html' %}
 {% load url from future %}
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>Create article</title>
-</head>
-<body>
-    <h1>Create article</h1>
-    <form method="post" action="{% url 'semantic_blog.views.create_article' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Create">
-    </form>
-</body>
-</html>
+{% block title %}
+    Write an article
+{% endblock %}
+
+{% block content %}
+    <h3>Write an article</h3>
+
+    <div class="block">
+        <form method="post" action="{% url 'semantic_blog.views.create_article' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button class="button right" tabindex="2">Save</button>
+        </form>
+    </div>
+{% endblock %}
