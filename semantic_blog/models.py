@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Tag(models.Model):
     value = models.CharField(max_length=200)
     url = models.CharField(max_length=200, null=True)
@@ -25,6 +26,7 @@ class Tag(models.Model):
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
 
 class Enhancement(models.Model):
     value = models.CharField(max_length=20000)
@@ -61,6 +63,7 @@ class Article(models.Model):
     def get_tags(self):
         return sorted(self.tags.all(), key=lambda x: x.value)
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, blank=True, null=True)
 
@@ -69,9 +72,10 @@ class UserProfile(models.Model):
 
     def get_display_name(self):
         return self.first_name + ' ' + self.last_name
-        
+
     def __unicode__(self):
         return self.get_display_name()
+
 
 class UserArticleConnection(models.Model):
     AUTHOR = 0

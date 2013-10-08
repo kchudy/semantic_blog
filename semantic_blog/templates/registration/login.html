@@ -7,21 +7,24 @@
     <title>Login</title>
 </head>
 <body>
-    <h1>Login</h1>
-    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-        {% csrf_token %}
-        <div>
-            <label>Username:</label>
-            <div>{{ form.username }}</div>
-            <div>{{ form.username.errors }}</div>
-        </div>
-        <div>
-            <label>Password:</label>
-            <div>{{ form.password }}</div>
-            <div>{{ form.password.errors }}</div>
-        </div>
+<h1>Login</h1>
 
-        <input type="submit" value="login">
-    </form>
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    {% csrf_token %}
+    <div>
+        <label>Username:</label>
+
+        <div>{{ form.username }}</div>
+        <div>{{ form.username.errors }}</div>
+    </div>
+    <div>
+        <label>Password:</label>
+
+        <div>{{ form.password }}</div>
+        <div>{{ form.password.errors }}</div>
+    </div>
+
+    <input type="submit" value="login">
+</form>
 </body>
 </html>

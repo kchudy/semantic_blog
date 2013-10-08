@@ -18,7 +18,9 @@
         <ul>
             {% for enhancement in enhancements %}
                 <li>
-                    <b><div><a href="#">{{ enhancement.value }}</a></div></b>
+                    <b>
+                        <div><a href="#">{{ enhancement.value }}</a></div>
+                    </b>
                     {% if enhancement.comment %}
                         <div>Comment: {{ enhancement.comment }}</div>
                     {% endif %}

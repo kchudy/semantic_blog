@@ -18,7 +18,7 @@ DATABASES = {
         'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '5432',
-        }
+    }
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -49,7 +49,8 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.normpath( os.path.join( os.path.dirname(__file__), 'static/'))
+MEDIA_ROOT = os.path.normpath(
+    os.path.join(os.path.dirname(__file__), 'static/'))
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -68,9 +69,9 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+# Put strings here, like "/home/html/static" or "C:/www/django/static".
+# Always use forward slashes, even on Windows.
+# Don't forget to use absolute paths, not relative paths.
 )
 
 # List of finder classes that know how to find static files in
@@ -78,7 +79,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -88,7 +89,7 @@ SECRET_KEY = 'ht-ijbh_)a1dm&amp;ayzu5z)h-88!0+h2&amp;o(!=d!8c#h)$%=yz6qh'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -156,12 +157,14 @@ LOGGING = {
 }
 
 # Security
-LOGIN_URL='/login/'
-LOGIN_REDIRECT_URL='/'
-AUTH_PROFILE_NAME='UserProfile'
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+AUTH_PROFILE_NAME = 'UserProfile'
 
 # Stanbol
-STANBOL_URL='http://localhost:8080/'
-#STANBOL_CONTENTHUB_STORE_URL=STANBOL_URL + 'contenthub/contenthub/store/%(item_id)d'
-#STANBOL_CONTENTHUB_GET_META_URL=STANBOL_URL + 'contenthub/contenthub/store/metadata/%(item_id)d'
-STANBOL_CONTENTHUB_GET_META_URL=STANBOL_URL + 'enhancer'
+STANBOL_URL = 'http://localhost:8080/'
+#STANBOL_CONTENTHUB_STORE_URL=STANBOL_URL + 'contenthub/contenthub/store/%(
+# item_id)d'
+#STANBOL_CONTENTHUB_GET_META_URL=STANBOL_URL +
+# 'contenthub/contenthub/store/metadata/%(item_id)d'
+STANBOL_CONTENTHUB_GET_META_URL = STANBOL_URL + 'enhancer'

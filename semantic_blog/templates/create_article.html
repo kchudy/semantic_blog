@@ -9,7 +9,8 @@
     <h3>Write an article</h3>
 
     <div class="block">
-        <form method="post" action="{% url 'semantic_blog.views.create_article' %}">
+        <form method="post"
+              action="{% url 'semantic_blog.views.create_article' %}">
             {% csrf_token %}
             {{ form.as_p }}
 
