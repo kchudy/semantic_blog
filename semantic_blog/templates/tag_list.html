@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load url from future %}
+
+{% block title %}
+    Tags
+{% endblock %}
+
+{% block content %}
+    <legend>Tags</legend>
+    <ul>
+        {% for tag in tags %}
+            <li>
+                <a href="{{ tag.get_absolute_url }}">{{ tag.value }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

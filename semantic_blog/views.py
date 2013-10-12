@@ -4,8 +4,7 @@ from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template.context import RequestContext
 from semantic_blog import helpers
 from semantic_blog.forms import ArticleForm
-from semantic_blog.models import UserArticleConnection, Article, Tag, \
-    Enhancement
+from semantic_blog.models import UserArticleConnection, Article, Tag
 
 
 @login_required
@@ -14,7 +13,8 @@ def index(request):
 
     ctx = RequestContext(request, {
         'name': user_profile.get_display_name,
-        'articles': Article.objects.all(),
+        'articles': Article.objects.all().order_by('title'),
+        'tags': Tag.objects.all().order_by('value'),
     })
 
     return render_to_response("index.html", ctx)
@@ -104,3 +104,15 @@ def view_tag(request, tag_id):
     })
 
     return render_to_response('view_tag.html', ctx)
+
+
+@login_required
+def tag_list(request):
+    user_profile = request.user.userprofile
+
+    ctx = RequestContext(request, {
+        'name': user_profile.get_display_name,
+        'tags': Tag.objects.all().order_by('value'),
+    })
+
+    return render_to_response("tag_list.html", ctx)

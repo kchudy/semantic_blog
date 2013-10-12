@@ -6,7 +6,15 @@
 {% endblock %}
 
 {% block content %}
-    <div class="block">
+    <p>
+        <a href="{% url 'semantic_blog.views.create_article' %}" class="btn btn-primary">
+            Write an article
+        </a>
+    </p>
+
+    <p>
+        <legend>Articles</legend>
+
         <ul>
             {% for article in articles %}
                 <li>
@@ -14,5 +22,13 @@
                 </li>
             {% endfor %}
         </ul>
-    </div>
+    </p>
+
+    <p>
+        <legend>Tags:</legend>
+
+        {% for tag in tags %}
+            <a href="{{ tag.get_absolute_url }}"><span class="label label-info">{{ tag.value }}</span></a>
+        {% endfor %}
+    </p>
 {% endblock %}

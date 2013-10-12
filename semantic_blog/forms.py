@@ -7,8 +7,8 @@ class ArticleForm(ModelForm):
     class Meta:
         model = Article
         widgets = {
-            'title': TextInput(),
-            'content': Textarea(),
+            'title': TextInput(attrs={'class': 'input-xxlarge'}),
+            'content': Textarea(attrs={'rows': 20, 'class': 'input-xxlarge'}),
         }
 
         exclude = ('enhancements', 'tags')

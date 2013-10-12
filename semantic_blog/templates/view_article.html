@@ -6,38 +6,30 @@
 {% endblock %}
 
 {% block content %}
-    <h3>{{ article.title }} by {{ author.get_display_name }}</h3>
+    <legend>{{ article.title }}</legend>
 
-    <div id="article-content" class="block">
-        {{ article.content }}
-    </div>
+    <p>{{ article.content }}</p>
 
-    <div id="enhancements" class="block">
-        <div>Enhancements:</div>
+    <p>
+        <legend>Enhancements:</legend>
+        {% for enhancement in enhancements %}
+            {% if enhancement.comment %}
+                <a href="#" class="tooltiped" data-toggle="tooltip" title="{{ enhancement.comment }}">
+                    <span class="label label-info">{{ enhancement.value }}</span>
+                </a>
+            {% else %}
+                <a href="#">
+                    <span class="label">{{ enhancement.value }}</span>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </p>
 
-        <ul>
-            {% for enhancement in enhancements %}
-                <li>
-                    <b>
-                        <div><a href="#">{{ enhancement.value }}</a></div>
-                    </b>
-                    {% if enhancement.comment %}
-                        <div>Comment: {{ enhancement.comment }}</div>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    <p>
+        <legend>Tags:</legend>
 
-    <div id="tags" class="block">
-        <div>Tags:</div>
-
-        <ul>
-            {% for tag in tags %}
-                <li>
-                    <span>{{ tag.value }}</span>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+        {% for tag in tags %}
+            <a href="{{ tag.get_absolute_url }}"><span class="label label-info">{{ tag.value }}</span></a>
+        {% endfor %}
+    </p>
 {% endblock %}

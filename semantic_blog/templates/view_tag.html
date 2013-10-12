@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block content %}
-    <h3>{{ tag.value }}</h3>
+    <legend>Tag <strong>{{ tag.value }}</strong></legend>
 
     <div class="block">
-        <div>Articles:</div>
+        <div>Associated articles:</div>
         <ul>
             {% for article in articles %}
                 <li>

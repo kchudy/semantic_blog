@@ -6,26 +6,30 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Search results</h3>
+    <legend>Search results</legend>
 
-    <div class="block">
-        <div>Articles:</div>
-        <ul>
-            {% for article in articles %}
-                <li>
-                    <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% if articles %}
+        <p>
+            <legend>Articles:</legend>
+            <ul>
+                {% for article in articles %}
+                    <li>
+                        <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </p>
+    {% endif %}
 
-    <div class="block">
-        <div>Tags:</div>
-        <ul>
-            {% for tag in tags %}
-                <li><a href="{{ tag.get_absolute_url }}">{{ tag.value }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% if tags %}
+        <p>
+            <legend>Tags:</legend>
+            <ul>
+                {% for tag in tags %}
+                    <li><a href="{{ tag.get_absolute_url }}">{{ tag.value }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </p>
+    {% endif %}
 {% endblock %}
