@@ -1,3 +1,3 @@
 semantic_blog
 =============
-Test signing updated 2
+Test signing updated 3
